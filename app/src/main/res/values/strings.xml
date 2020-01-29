@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">App Info</string>
+
+    <string name="loading">Loading…</string>
+    <string name="none">None</string>
+
+    <string name="installed">Installed</string>
+    <string name="updated">Updated</string>
+    <string name="version_code">Version code</string>
+    <string name="version_name">Version name</string>
+    <string name="min_sdk">Min SDK</string>
+    <string name="target_sdk">Target SDK</string>
+    <string name="activities">Activities</string>
+    <string name="services">Services</string>
+    <string name="permissions">Permissions</string>
+    <string name="providers">Providers</string>
+    <string name="receivers">Receivers</string>
+    <string name="features">Features</string>
+    <string name="component_name">Name</string>
+    <string name="component_package">Package</string>
+    <string name="target_activity">Target Activity</string>
+    <string name="task_affinity">Task Affinity</string>
+    <string name="component_permission">Permission</string>
+    <string name="component_process_name">Process Name</string>
+    <string name="component_enabled">Enabled</string>
+    <string name="component_exported">Exported</string>
+    <string name="details">Details</string>
+    <string name="activity_info">Activity info</string>
+    <string name="service_info">Service info</string>
+    <string name="app_uid">UID</string>
+    <string name="unknown">Unknown</string>
+    <string name="feature_version">Version: %s</string>
+    <string name="feature_required">Required</string>
+    <string name="feature_not_required">Not required</string>
+    <string name="provider">Provider</string>
+    <string name="component_split_name">Split name</string>
+    <string name="provider_read_permission">Read permission</string>
+    <string name="provider_write_permission">Write permission</string>
+    <string name="multiprocess_true">True</string>
+    <string name="multiprocess_false">False</string>
+    <string name="component_multiprocess">Multi process</string>
+    <string name="provider_grant_uri_permissions">Grant uri permissions</string>
+    <string name="provider_uri_permission_patterns">Uri permission patterns</string>
+    <string name="provider_path_permissions">Path permissions</string>
+    <string name="backup_agent_name">Backup Agent Name</string>
+    <string name="class_name">Class name</string>
+    <string name="data_dir">Data directory</string>
+    <string name="device_protected_data_dir">Device protected data directory</string>
+    <string name="source_dir">Source directory</string>
+    <string name="public_source_dir">Public source directory</string>
+</resources>
