@@ -2,7 +2,6 @@ package com.ibashkimi.appinfo.ui.details
 
 import android.content.pm.ActivityInfo
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.res.stringResource
@@ -33,9 +32,9 @@ fun ActivityScreen(activity: ActivityInfo) {
         val classPackage = activity.name.substringBeforeLast(".")
         Item(R.string.component_name, className)
         Item(R.string.component_package, classPackage)
-        Item(R.string.target_activity, activity.targetActivity ?: +stringResource(R.string.none))
-        Item(R.string.task_affinity, activity.taskAffinity ?: +stringResource(R.string.none))
-        Item(R.string.component_permission, activity.permission ?: +stringResource(R.string.none))
+        Item(R.string.target_activity, activity.targetActivity ?: stringResource(R.string.none))
+        Item(R.string.task_affinity, activity.taskAffinity ?: stringResource(R.string.none))
+        Item(R.string.component_permission, activity.permission ?: stringResource(R.string.none))
         Item(R.string.component_process_name, activity.processName)
         Item(R.string.component_enabled, activity.enabled.toString())
         Item(R.string.component_exported, activity.exported.toString())

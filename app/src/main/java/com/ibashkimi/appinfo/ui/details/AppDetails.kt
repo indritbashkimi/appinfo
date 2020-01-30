@@ -6,20 +6,17 @@ import android.text.format.DateUtils
 import androidx.compose.Composable
 import androidx.compose.Context
 import androidx.compose.ambient
-import androidx.compose.unaryPlus
 import androidx.ui.core.ContextAmbient
+import androidx.ui.core.Opacity
 import androidx.ui.core.Text
-import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.*
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.withOpacity
 import androidx.ui.res.stringResource
-import androidx.ui.text.ParagraphStyle
-import androidx.ui.text.style.TextAlign
 import androidx.ui.tooling.preview.Preview
+import androidx.ui.unit.dp
 import com.ibashkimi.appinfo.R
 import com.ibashkimi.appinfo.Screen
 import com.ibashkimi.appinfo.data.Request
@@ -33,10 +30,12 @@ fun DetailsScreen(request: Request<PackageInfo>) {
     when (val packageInfo = request.result) {
         is Result.Loading -> {
             Center {
-                Text(
-                    text = +stringResource(R.string.loading),
-                    style = ((+MaterialTheme.typography()).h6).withOpacity(0.5f)
-                )
+                Opacity(opacity = 0.5f) {
+                    Text(
+                        text = stringResource(R.string.loading),
+                        style = ((MaterialTheme.typography()).h6)
+                    )
+                }
             }
         }
         is Result.Success -> {
@@ -47,13 +46,13 @@ fun DetailsScreen(request: Request<PackageInfo>) {
 
 @Composable
 private fun PackageInfoLoaded(app: PackageInfo) {
-    val context = +ambient(ContextAmbient)
+    val context = ambient(ContextAmbient)
     VerticalScroller {
-        Column(modifier = Spacing(top = 8.dp, bottom = 8.dp)) {
-            Column(modifier = Spacing(left = 16.dp, right = 16.dp)) {
+        Column(modifier = LayoutPadding(top = 8.dp, bottom = 8.dp)) {
+            Column(modifier = LayoutPadding(left = 16.dp, right = 16.dp)) {
                 val label = app.applicationInfo.loadLabel(context.packageManager).toString()
-                Text(label, style = ((+MaterialTheme.typography()).subtitle1))
-                Text(app.packageName, style = ((+MaterialTheme.typography()).subtitle2))
+                Text(label, style = ((MaterialTheme.typography()).subtitle1))
+                Text(app.packageName, style = ((MaterialTheme.typography()).subtitle2))
             }
             Column {
                 DetailElem(R.string.installed, app.firstInstallTime.toRelativeTimeSpan())
@@ -74,7 +73,7 @@ private fun PackageInfoLoaded(app: PackageInfo) {
                 DetailElem(R.string.component_enabled, app.applicationInfo.enabled.toString())
                 DetailElem(
                     R.string.backup_agent_name,
-                    app.applicationInfo.backupAgentName ?: +stringResource(R.string.none)
+                    app.applicationInfo.backupAgentName ?: stringResource(R.string.none)
                 )
 
                 SubsectionItem(R.string.activities, app.activities.sizeToString(context)) {
@@ -101,7 +100,7 @@ private fun PackageInfoLoaded(app: PackageInfo) {
 
                 Item(
                     R.string.class_name,
-                    app.applicationInfo.className ?: +stringResource(R.string.none)
+                    app.applicationInfo.className ?: stringResource(R.string.none)
                 )
                 Item(R.string.data_dir, app.applicationInfo.dataDir)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -120,28 +119,23 @@ private fun PackageInfoLoaded(app: PackageInfo) {
 @Composable
 private fun DetailElem(first: String, second: String) {
     Padding(16.dp, 8.dp, 16.dp, 8.dp) {
-        FlexRow(crossAxisAlignment = CrossAxisAlignment.Start) {
-            inflexible {
-                Text(
-                    first, modifier = Spacing(right = 8.dp),
-                    style = ((+MaterialTheme.typography()).subtitle1)
-                )
-
-            }
-            expanded(1.0f) {
-                Text(
-                    second, style = ((+MaterialTheme.typography()).subtitle1),
-                    paragraphStyle = ParagraphStyle(textAlign = TextAlign.End)
-                )
-            }
-
+        Row(
+            modifier = LayoutWidth.Fill,
+            arrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                first,
+                modifier = LayoutPadding(right = 8.dp),
+                style = ((MaterialTheme.typography()).subtitle1)
+            )
+            Text(second, style = ((MaterialTheme.typography()).subtitle1))
         }
     }
 }
 
 @Composable
 fun DetailElem(first: Int, second: String) {
-    DetailElem(+stringResource(first), second)
+    DetailElem(stringResource(first), second)
 }
 
 @Composable
@@ -152,22 +146,16 @@ fun SubsectionItem(title: String, summary: String = "", onClick: () -> Unit = {}
                 padding = EdgeInsets(16.dp, 8.dp, 16.dp, 8.dp),
                 constraints = DpConstraints(minHeight = 48.dp)
             ) {
-                FlexRow(crossAxisAlignment = CrossAxisAlignment.Start) {
-                    inflexible {
-                        Text(
-                            text = title,
-                            modifier = Spacing(right = 8.dp)
+                Row(
+                    modifier = LayoutWidth.Fill,
+                    arrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = title,
+                        modifier = LayoutPadding(right = 8.dp)
 
-                        )
-                    }
-                    expanded(1.0f) {
-                        Text(
-                            text = summary,
-
-                            paragraphStyle = ParagraphStyle(textAlign = TextAlign.End)
-                        )
-                    }
-
+                    )
+                    Text(text = summary)
                 }
             }
         }
@@ -176,13 +164,13 @@ fun SubsectionItem(title: String, summary: String = "", onClick: () -> Unit = {}
 
 @Composable
 fun SubsectionItem(title: Int, summary: String, onClick: () -> Unit = {}) {
-    SubsectionItem(+stringResource(title), summary, onClick)
+    SubsectionItem(stringResource(title), summary, onClick)
 }
 
 @Preview
 @Composable
 fun DetailElemPreview() {
-    DetailElem("second", "01/01/1979 00:00:00")
+    DetailElem("Installed", "01/01/1979 00:00:00")
 }
 
 @Preview

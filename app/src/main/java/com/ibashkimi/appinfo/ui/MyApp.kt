@@ -2,11 +2,11 @@ package com.ibashkimi.appinfo.ui
 
 import androidx.compose.Composable
 import androidx.compose.ambient
-import androidx.compose.unaryPlus
 import androidx.ui.core.ContextAmbient
+import androidx.ui.core.Modifier
 import androidx.ui.core.Text
 import androidx.ui.foundation.isSystemInDarkTheme
-import androidx.ui.layout.FlexColumn
+import androidx.ui.layout.Column
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TopAppBar
 import androidx.ui.material.surface.Surface
@@ -21,7 +21,7 @@ import com.ibashkimi.appinfo.ui.home.HomeScreen
 
 @Composable
 fun MyApp() {
-    val isDark = +isSystemInDarkTheme()
+    val isDark = isSystemInDarkTheme()
     MaterialTheme(
         colors = if (isDark) darkThemeColors else lightThemeColors
     ) {
@@ -31,36 +31,31 @@ fun MyApp() {
 
 @Composable
 private fun ContentWithTopAppBar() {
-    FlexColumn {
+    Column {
         val destination = Status.currentScreen
-        inflexible {
-            val title: String = +stringResource(destination.titleStringRes)
-            if (destination == Screen.Home) {
-                TopAppBar(title = { Text(title) })
-            } else {
-                TopAppBar(
-                    title = { Text(title) },
-                    navigationIcon = {
-                        VectorImageButton(R.drawable.ic_arrow_back) {
-                            Navigation.pop()
-                        }
-                    })
-            }
+        val title: String = stringResource(destination.titleStringRes)
+        if (destination == Screen.Home) {
+            TopAppBar(title = { Text(title) })
+        } else {
+            TopAppBar(
+                title = { Text(title) },
+                navigationIcon = {
+                    VectorImageButton(R.drawable.ic_arrow_back) {
+                        Navigation.pop()
+                    }
+                })
         }
-        expanded(1F) {
-            // occupy whole empty space in the Column
-            AppContent(destination)
-        }
+        AppContent(destination, LayoutFlexible(1f))
     }
 }
 
 @Composable
-private fun AppContent(screen: Screen) {
+private fun AppContent(screen: Screen, modifier: Modifier) {
     android.util.Log.d("MyApp", "new screen: $screen")
-    Surface(color = (+MaterialTheme.colors()).background) {
+    Surface(color = (MaterialTheme.colors()).background, modifier = modifier) {
         when (screen) {
             is Screen.Home -> {
-                val context = +ambient(ContextAmbient)
+                val context = ambient(ContextAmbient)
                 HomeScreen(DataManager.getPackages(context))
             }
             is Screen.AppDetails -> DetailsScreen(request = screen.request)

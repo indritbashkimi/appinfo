@@ -3,20 +3,18 @@ package com.ibashkimi.appinfo.ui.details
 import android.content.pm.PackageInfo
 import androidx.compose.Composable
 import androidx.ui.core.Text
-import androidx.ui.core.dp
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
+import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Padding
-import androidx.ui.layout.Row
+import androidx.ui.unit.dp
 
 @Composable
 fun PermissionsScreen(packageInfo: PackageInfo) {
     VerticalScroller {
-        Row {
-            Column(modifier = Flexible(1f)) {
-                packageInfo.requestedPermissions.sorted().forEach {
-                    PermissionItem(it)
-                }
+        Column(modifier = LayoutWidth.Fill) {
+            packageInfo.requestedPermissions.sorted().forEach {
+                PermissionItem(it)
             }
         }
     }

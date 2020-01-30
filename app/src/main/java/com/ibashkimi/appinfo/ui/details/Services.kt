@@ -2,11 +2,9 @@ package com.ibashkimi.appinfo.ui.details
 
 import android.content.pm.ServiceInfo
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.unaryPlus
-import androidx.ui.core.ContextAmbient
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
+import androidx.ui.res.stringResource
 import com.ibashkimi.appinfo.R
 import com.ibashkimi.appinfo.Screen
 import com.ibashkimi.appinfo.navigateTo
@@ -29,14 +27,13 @@ fun ServicesScreen(services: Array<ServiceInfo>) {
 
 @Composable
 fun ServiceScreen(service: ServiceInfo) {
-    val context = +ambient(ContextAmbient)
     service.apply {
         Column {
             val className = name.substringAfterLast(".")
             val classPackage = name.substringBeforeLast(".")
             Item(R.string.component_name, className)
             Item(R.string.component_package, classPackage)
-            Item(R.string.component_permission, permission ?: context.getString(R.string.none))
+            Item(R.string.component_permission, permission ?: stringResource(R.string.none))
             Item(R.string.component_process_name, processName)
             Item(R.string.component_enabled, enabled.toString())
             Item(R.string.component_exported, exported.toString())
