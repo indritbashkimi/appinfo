@@ -5,7 +5,6 @@ import android.os.Build
 import android.text.format.DateUtils
 import androidx.compose.Composable
 import androidx.compose.Context
-import androidx.compose.ambient
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Opacity
 import androidx.ui.core.Text
@@ -46,7 +45,7 @@ fun DetailsScreen(request: Request<PackageInfo>) {
 
 @Composable
 private fun PackageInfoLoaded(app: PackageInfo) {
-    val context = ambient(ContextAmbient)
+    val context = ContextAmbient.current
     VerticalScroller {
         Column(modifier = LayoutPadding(top = 8.dp, bottom = 8.dp)) {
             Column(modifier = LayoutPadding(left = 16.dp, right = 16.dp)) {
@@ -118,18 +117,16 @@ private fun PackageInfoLoaded(app: PackageInfo) {
 
 @Composable
 private fun DetailElem(first: String, second: String) {
-    Padding(16.dp, 8.dp, 16.dp, 8.dp) {
-        Row(
-            modifier = LayoutWidth.Fill,
-            arrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                first,
-                modifier = LayoutPadding(right = 8.dp),
-                style = ((MaterialTheme.typography()).subtitle1)
-            )
-            Text(second, style = ((MaterialTheme.typography()).subtitle1))
-        }
+    Row(
+        modifier = LayoutWidth.Fill + LayoutPadding(16.dp, 8.dp, 16.dp, 8.dp),
+        arrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            first,
+            modifier = LayoutPadding(right = 8.dp),
+            style = ((MaterialTheme.typography()).subtitle1)
+        )
+        Text(second, style = ((MaterialTheme.typography()).subtitle1))
     }
 }
 

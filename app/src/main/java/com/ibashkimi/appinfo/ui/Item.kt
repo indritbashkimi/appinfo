@@ -4,9 +4,8 @@ import androidx.compose.Composable
 import androidx.ui.core.Text
 import androidx.ui.foundation.Clickable
 import androidx.ui.layout.Column
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
-import androidx.ui.layout.Padding
-import androidx.ui.layout.Row
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.res.stringResource
@@ -25,13 +24,9 @@ fun Summary(text: String) {
 
 @Composable
 fun Item(title: String, summary: String) {
-    Padding(16.dp, 8.dp, 16.dp, 8.dp) {
-        Row {
-            Column(modifier = LayoutWidth.Fill) {
-                Title(title)
-                Summary(summary)
-            }
-        }
+    Column(modifier = LayoutWidth.Fill + LayoutPadding(16.dp, 8.dp, 16.dp, 8.dp)) {
+        Title(title)
+        Summary(summary)
     }
 }
 

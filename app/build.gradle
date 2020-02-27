@@ -56,6 +56,7 @@ dependencies {
     implementation "androidx.ui:ui-material:$compose_version"
     implementation "androidx.ui:ui-tooling:$compose_version"
     implementation "androidx.ui:ui-foundation:$compose_version"
+    implementation "androidx.ui:ui-material-icons-extended:$compose_version"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
 

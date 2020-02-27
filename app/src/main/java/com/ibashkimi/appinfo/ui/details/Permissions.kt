@@ -5,8 +5,8 @@ import androidx.compose.Composable
 import androidx.ui.core.Text
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
-import androidx.ui.layout.Padding
 import androidx.ui.unit.dp
 
 @Composable
@@ -22,7 +22,5 @@ fun PermissionsScreen(packageInfo: PackageInfo) {
 
 @Composable
 private fun PermissionItem(permission: String) {
-    Padding(16.dp, 8.dp, 16.dp, 6.dp) {
-        Text(text = permission)
-    }
+    Text(text = permission, modifier = LayoutPadding(16.dp, 8.dp, 16.dp, 8.dp))
 }

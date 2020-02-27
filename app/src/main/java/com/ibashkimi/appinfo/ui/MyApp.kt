@@ -1,18 +1,20 @@
 package com.ibashkimi.appinfo.ui
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Modifier
 import androidx.ui.core.Text
+import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.isSystemInDarkTheme
-import androidx.ui.layout.Column
+import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Scaffold
 import androidx.ui.material.TopAppBar
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.ArrowBack
+import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.stringResource
 import androidx.ui.tooling.preview.Preview
-import com.example.jetnews.ui.VectorImageButton
 import com.ibashkimi.appinfo.*
 import com.ibashkimi.appinfo.data.DataManager
 import com.ibashkimi.appinfo.ui.details.*
@@ -25,37 +27,43 @@ fun MyApp() {
     MaterialTheme(
         colors = if (isDark) darkThemeColors else lightThemeColors
     ) {
-        ContentWithTopAppBar()
-    }
-}
-
-@Composable
-private fun ContentWithTopAppBar() {
-    Column {
         val destination = Status.currentScreen
-        val title: String = stringResource(destination.titleStringRes)
-        if (destination == Screen.Home) {
-            TopAppBar(title = { Text(title) })
-        } else {
-            TopAppBar(
-                title = { Text(title) },
-                navigationIcon = {
-                    VectorImageButton(R.drawable.ic_arrow_back) {
-                        Navigation.pop()
-                    }
-                })
-        }
-        AppContent(destination, LayoutFlexible(1f))
+        Scaffold(
+            topAppBar = {
+                val title: String = stringResource(destination.titleStringRes)
+                if (destination == Screen.Home) {
+                    TopAppBar(title = { Text(title) })
+                } else {
+                    TopAppBar(
+                        title = { Text(title) },
+                        navigationIcon = {
+                            if (destination != Screen.Home) {
+                                Ripple(bounded = false) {
+                                    Clickable(onClick = { Navigation.pop() }) {
+                                        DrawVector(
+                                            Icons.Default.ArrowBack,
+                                            tintColor = MaterialTheme.colors().onPrimary
+                                        )
+                                    }
+                                }
+                            }
+                        })
+                }
+            },
+            bodyContent = {
+                AppContent(destination)
+            }
+        )
     }
 }
 
 @Composable
-private fun AppContent(screen: Screen, modifier: Modifier) {
+private fun AppContent(screen: Screen) {
     android.util.Log.d("MyApp", "new screen: $screen")
-    Surface(color = (MaterialTheme.colors()).background, modifier = modifier) {
+    Surface(color = (MaterialTheme.colors()).background) {
         when (screen) {
             is Screen.Home -> {
-                val context = ambient(ContextAmbient)
+                val context = ContextAmbient.current
                 HomeScreen(DataManager.getPackages(context))
             }
             is Screen.AppDetails -> DetailsScreen(request = screen.request)

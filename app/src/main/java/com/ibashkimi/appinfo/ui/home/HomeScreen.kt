@@ -3,9 +3,8 @@ package com.ibashkimi.appinfo.ui.home
 import androidx.compose.Composable
 import androidx.ui.core.Opacity
 import androidx.ui.core.Text
-import androidx.ui.foundation.VerticalScroller
+import androidx.ui.foundation.AdapterList
 import androidx.ui.layout.Center
-import androidx.ui.layout.Column
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.stringResource
 import com.ibashkimi.appinfo.R
@@ -41,11 +40,7 @@ private fun LoadingPackages() {
 @Composable
 private fun PackagesLoaded(packages: List<AppPackage>) {
     android.util.Log.d("HomeScreen", "packagesLoaded: ${packages.size}")
-    VerticalScroller {
-        Column {
-            packages.forEach {
-                PackageCardSimple(it)
-            }
-        }
+    AdapterList(data = packages) {
+        PackageCardSimple(it)
     }
 }
