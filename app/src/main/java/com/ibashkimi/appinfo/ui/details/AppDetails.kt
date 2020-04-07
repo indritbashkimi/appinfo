@@ -166,12 +166,6 @@ fun SubSectionItemPreview() {
     SubsectionItem("Activities", "0")
 }
 
-/*private fun Long.toFormattedDateTime(): String {
-    val cal: Calendar = Calendar.getInstance()
-    cal.timeInMillis = this
-    return DateFormat.format("dd-MM-yyyy hh:mm:ss", cal).toString()
-}*/
-
 private fun Long.toRelativeTimeSpan(): String =
     DateUtils.getRelativeTimeSpanString(
         this,
