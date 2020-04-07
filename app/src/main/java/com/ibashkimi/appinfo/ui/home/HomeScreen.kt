@@ -1,10 +1,13 @@
 package com.ibashkimi.appinfo.ui.home
 
 import androidx.compose.Composable
-import androidx.ui.core.Opacity
-import androidx.ui.core.Text
+import androidx.ui.core.Alignment
+import androidx.ui.core.Modifier
+import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.AdapterList
-import androidx.ui.layout.Center
+import androidx.ui.foundation.Text
+import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.wrapContentSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.stringResource
 import com.ibashkimi.appinfo.R
@@ -27,14 +30,11 @@ fun HomeScreen(packages: Request<List<AppPackage>>) {
 
 @Composable
 private fun LoadingPackages() {
-    Center {
-        Opacity(opacity = 0.5f) {
-            Text(
-                text = stringResource(R.string.loading),
-                style = ((MaterialTheme.typography()).h5)
-            )
-        }
-    }
+    Text(
+        text = stringResource(R.string.loading),
+        style = MaterialTheme.typography.h5,
+        modifier = Modifier.fillMaxSize() + Modifier.wrapContentSize(Alignment.Center) + Modifier.drawOpacity(0.5f)
+    )
 }
 
 @Composable

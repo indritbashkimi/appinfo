@@ -1,20 +1,25 @@
 package com.ibashkimi.appinfo.ui
 
 import androidx.compose.Composable
+import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Text
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.Image
+import androidx.ui.foundation.Text
 import androidx.ui.foundation.isSystemInDarkTheme
-import androidx.ui.graphics.vector.DrawVector
+import androidx.ui.graphics.ColorFilter
+import androidx.ui.layout.padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Scaffold
+import androidx.ui.material.Surface
 import androidx.ui.material.TopAppBar
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
-import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.surface.Surface
+import androidx.ui.material.ripple.ripple
 import androidx.ui.res.stringResource
 import androidx.ui.tooling.preview.Preview
+import androidx.ui.unit.dp
 import com.ibashkimi.appinfo.*
 import com.ibashkimi.appinfo.data.DataManager
 import com.ibashkimi.appinfo.ui.details.*
@@ -37,15 +42,15 @@ fun MyApp() {
                     TopAppBar(
                         title = { Text(title) },
                         navigationIcon = {
-                            if (destination != Screen.Home) {
-                                Ripple(bounded = false) {
-                                    Clickable(onClick = { Navigation.pop() }) {
-                                        DrawVector(
-                                            Icons.Default.ArrowBack,
-                                            tintColor = MaterialTheme.colors().onPrimary
-                                        )
-                                    }
-                                }
+                            Clickable(
+                                onClick = { Navigation.pop() },
+                                modifier = Modifier.ripple() + Modifier.padding(16.dp)
+                            ) {
+                                Image(
+                                    asset = Icons.Default.ArrowBack,
+                                    alignment = Alignment.Center,
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary)
+                                )
                             }
                         })
                 }
@@ -60,7 +65,7 @@ fun MyApp() {
 @Composable
 private fun AppContent(screen: Screen) {
     android.util.Log.d("MyApp", "new screen: $screen")
-    Surface(color = (MaterialTheme.colors()).background) {
+    Surface(color = MaterialTheme.colors.background) {
         when (screen) {
             is Screen.Home -> {
                 val context = ContextAmbient.current

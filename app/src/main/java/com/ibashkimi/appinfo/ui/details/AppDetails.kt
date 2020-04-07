@@ -1,18 +1,20 @@
 package com.ibashkimi.appinfo.ui.details
 
+import android.content.Context
 import android.content.pm.PackageInfo
 import android.os.Build
 import android.text.format.DateUtils
 import androidx.compose.Composable
-import androidx.compose.Context
+import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Opacity
-import androidx.ui.core.Text
+import androidx.ui.core.Modifier
+import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.*
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.ripple.ripple
 import androidx.ui.res.stringResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
@@ -28,14 +30,13 @@ import com.ibashkimi.appinfo.ui.Item
 fun DetailsScreen(request: Request<PackageInfo>) {
     when (val packageInfo = request.result) {
         is Result.Loading -> {
-            Center {
-                Opacity(opacity = 0.5f) {
-                    Text(
-                        text = stringResource(R.string.loading),
-                        style = ((MaterialTheme.typography()).h6)
-                    )
-                }
-            }
+            Text(
+                text = stringResource(R.string.loading),
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.fillMaxSize() + Modifier.wrapContentSize(Alignment.Center) + Modifier.drawOpacity(
+                    opacity = 0.5f
+                )
+            )
         }
         is Result.Success -> {
             PackageInfoLoaded(packageInfo.result)
@@ -47,11 +48,11 @@ fun DetailsScreen(request: Request<PackageInfo>) {
 private fun PackageInfoLoaded(app: PackageInfo) {
     val context = ContextAmbient.current
     VerticalScroller {
-        Column(modifier = LayoutPadding(top = 8.dp, bottom = 8.dp)) {
-            Column(modifier = LayoutPadding(left = 16.dp, right = 16.dp)) {
+        Column(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
+            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
                 val label = app.applicationInfo.loadLabel(context.packageManager).toString()
-                Text(label, style = ((MaterialTheme.typography()).subtitle1))
-                Text(app.packageName, style = ((MaterialTheme.typography()).subtitle2))
+                Text(label, style = MaterialTheme.typography.subtitle1)
+                Text(app.packageName, style = MaterialTheme.typography.subtitle2)
             }
             Column {
                 DetailElem(R.string.installed, app.firstInstallTime.toRelativeTimeSpan())
@@ -118,15 +119,15 @@ private fun PackageInfoLoaded(app: PackageInfo) {
 @Composable
 private fun DetailElem(first: String, second: String) {
     Row(
-        modifier = LayoutWidth.Fill + LayoutPadding(16.dp, 8.dp, 16.dp, 8.dp),
+        modifier = Modifier.fillMaxWidth() + Modifier.padding(16.dp, 8.dp, 16.dp, 8.dp),
         arrangement = Arrangement.SpaceBetween
     ) {
         Text(
             first,
-            modifier = LayoutPadding(right = 8.dp),
-            style = ((MaterialTheme.typography()).subtitle1)
+            modifier = Modifier.padding(end = 8.dp),
+            style = MaterialTheme.typography.subtitle1
         )
-        Text(second, style = ((MaterialTheme.typography()).subtitle1))
+        Text(second, style = MaterialTheme.typography.subtitle1)
     }
 }
 
@@ -137,24 +138,13 @@ fun DetailElem(first: Int, second: String) {
 
 @Composable
 fun SubsectionItem(title: String, summary: String = "", onClick: () -> Unit = {}) {
-    Ripple(bounded = true) {
-        Clickable(onClick = onClick) {
-            Container(
-                padding = EdgeInsets(16.dp, 8.dp, 16.dp, 8.dp),
-                constraints = DpConstraints(minHeight = 48.dp)
-            ) {
-                Row(
-                    modifier = LayoutWidth.Fill,
-                    arrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = title,
-                        modifier = LayoutPadding(right = 8.dp)
-
-                    )
-                    Text(text = summary)
-                }
-            }
+    Clickable(onClick = onClick, modifier = Modifier.ripple()) {
+        Row(
+            modifier = Modifier.padding(16.dp) + Modifier.fillMaxWidth(),
+            arrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = title, modifier = Modifier.padding(end = 8.dp))
+            Text(text = summary)
         }
     }
 }
