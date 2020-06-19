@@ -2,13 +2,12 @@ package com.ibashkimi.appinfo.ui
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.Text
+import androidx.ui.foundation.clickable
 import androidx.ui.layout.Column
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ripple.ripple
 import androidx.ui.res.stringResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
@@ -24,23 +23,21 @@ fun Summary(text: String) {
 }
 
 @Composable
-fun Item(title: String, summary: String) {
-    Column(modifier = Modifier.fillMaxWidth() + Modifier.padding(16.dp, 8.dp, 16.dp, 8.dp)) {
+fun Item(title: String, summary: String, modifier: Modifier = Modifier) {
+    Column(modifier = modifier + Modifier.fillMaxWidth() + Modifier.padding(16.dp, 8.dp, 16.dp, 8.dp)) {
         Title(title)
         Summary(summary)
     }
 }
 
 @Composable
-fun Item(title: Int, summary: String) {
-    Item(stringResource(title), summary)
+fun Item(title: Int, summary: String, modifier: Modifier = Modifier) {
+    Item(stringResource(title), summary, modifier)
 }
 
 @Composable
 fun ClickableItem(title: String, summary: String, onClick: () -> Unit = {}) {
-    Clickable(onClick = onClick, modifier = Modifier.ripple(true)) {
-        Item(title, summary)
-    }
+    Item(title, summary, modifier = Modifier.clickable(onClick = onClick))
 }
 
 @Composable

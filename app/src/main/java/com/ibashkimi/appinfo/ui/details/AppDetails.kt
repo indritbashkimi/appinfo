@@ -9,12 +9,11 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
-import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
+import androidx.ui.foundation.clickable
 import androidx.ui.layout.*
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ripple.ripple
 import androidx.ui.res.stringResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
@@ -120,7 +119,7 @@ private fun PackageInfoLoaded(app: PackageInfo) {
 private fun DetailElem(first: String, second: String) {
     Row(
         modifier = Modifier.fillMaxWidth() + Modifier.padding(16.dp, 8.dp, 16.dp, 8.dp),
-        arrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             first,
@@ -138,14 +137,13 @@ fun DetailElem(first: Int, second: String) {
 
 @Composable
 fun SubsectionItem(title: String, summary: String = "", onClick: () -> Unit = {}) {
-    Clickable(onClick = onClick, modifier = Modifier.ripple()) {
-        Row(
-            modifier = Modifier.padding(16.dp) + Modifier.fillMaxWidth(),
-            arrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = title, modifier = Modifier.padding(end = 8.dp))
-            Text(text = summary)
-        }
+    Row(
+        modifier = Modifier.fillMaxWidth()
+                + Modifier.clickable(onClick = onClick) + Modifier.padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = title, modifier = Modifier.padding(end = 8.dp))
+        Text(text = summary)
     }
 }
 
