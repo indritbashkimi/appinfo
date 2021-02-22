@@ -1,10 +1,15 @@
 package com.ibashkimi.appinfo.ui.details
 
 import android.content.pm.ServiceInfo
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ListItem
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ibashkimi.appinfo.R
 import com.ibashkimi.appinfo.Screen
@@ -15,12 +20,18 @@ import com.ibashkimi.appinfo.ui.Item
 fun ServicesScreen(services: Array<ServiceInfo>) {
     LazyColumn {
         items(services) {
-            val className = it.name.substringAfterLast(".")
-            val classPackage = it.name.substringBeforeLast(".")
-            ClickableComponentItem(title = className, summary = classPackage) {
-                navigateTo(Screen.Service(it))
-            }
+            ServiceItem(
+                service = it,
+                modifier = Modifier.clickable { navigateTo(Screen.Service(it)) })
         }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun ServiceItem(service: ServiceInfo, modifier: Modifier) {
+    ListItem(modifier, secondaryText = { Text(service.name.substringBeforeLast(".")) }) {
+        Text(service.name.substringAfterLast("."))
     }
 }
 

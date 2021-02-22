@@ -46,7 +46,12 @@ private fun PackagesLoaded(packages: List<AppPackage>) {
     android.util.Log.d("HomeScreen", "packagesLoaded: ${packages.size}")
     LazyColumn {
         items(packages) {
-            PackageCardSimple(it)
+            PackageCardSimple(
+                app = it,
+                modifier = Modifier.clickable(onClick = {
+                    navigateTo(Screen.AppDetails(it.packageInfo.packageName))
+                })
+            )
         }
     }
 }
