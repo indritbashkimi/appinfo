@@ -2,10 +2,11 @@ package com.ibashkimi.appinfo.ui.details
 
 import android.content.pm.ProviderInfo
 import android.os.Build
-import androidx.compose.Composable
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.layout.Column
-import androidx.ui.res.stringResource
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.ibashkimi.appinfo.R
 import com.ibashkimi.appinfo.Screen
 import com.ibashkimi.appinfo.navigateTo
@@ -14,14 +15,12 @@ import com.ibashkimi.appinfo.ui.Item
 
 @Composable
 fun ProvidersScreen(providers: Array<ProviderInfo>) {
-    VerticalScroller {
-        Column {
-            providers.forEach {
-                val className = it.name.substringAfterLast(".")
-                val classPackage = it.name.substringBeforeLast(".")
-                ClickableItem(title = className, summary = classPackage) {
-                    navigateTo(Screen.Provider(it))
-                }
+    LazyColumn {
+        items(providers) {
+            val className = it.name.substringAfterLast(".")
+            val classPackage = it.name.substringBeforeLast(".")
+            ClickableItem(title = className, summary = classPackage) {
+                navigateTo(Screen.Provider(it))
             }
         }
     }

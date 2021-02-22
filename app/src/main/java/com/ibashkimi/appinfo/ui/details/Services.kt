@@ -1,10 +1,11 @@
 package com.ibashkimi.appinfo.ui.details
 
 import android.content.pm.ServiceInfo
-import androidx.compose.Composable
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.layout.Column
-import androidx.ui.res.stringResource
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.ibashkimi.appinfo.R
 import com.ibashkimi.appinfo.Screen
 import com.ibashkimi.appinfo.navigateTo
@@ -12,14 +13,12 @@ import com.ibashkimi.appinfo.ui.Item
 
 @Composable
 fun ServicesScreen(services: Array<ServiceInfo>) {
-    VerticalScroller {
-        Column {
-            services.forEach {
-                val className = it.name.substringAfterLast(".")
-                val classPackage = it.name.substringBeforeLast(".")
-                ClickableComponentItem(title = className, summary = classPackage) {
-                    navigateTo(Screen.Service(it))
-                }
+    LazyColumn {
+        items(services) {
+            val className = it.name.substringAfterLast(".")
+            val classPackage = it.name.substringBeforeLast(".")
+            ClickableComponentItem(title = className, summary = classPackage) {
+                navigateTo(Screen.Service(it))
             }
         }
     }

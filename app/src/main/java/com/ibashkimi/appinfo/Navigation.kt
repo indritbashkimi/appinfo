@@ -1,7 +1,7 @@
 package com.ibashkimi.appinfo
 
 import android.content.pm.*
-import androidx.compose.Model
+import androidx.compose.runtime.mutableStateOf
 import com.ibashkimi.appinfo.data.AppPackage
 import com.ibashkimi.appinfo.data.Request
 
@@ -22,9 +22,8 @@ sealed class Screen {
     class Features(val features: Array<FeatureInfo>) : Screen()
 }
 
-@Model
 object Status {
-    var currentScreen: Screen = Screen.Home
+    var currentScreen = mutableStateOf<Screen>(Screen.Home)
 }
 
 object Navigation {
@@ -50,7 +49,7 @@ object Navigation {
     }
 
     private fun stackChanged() {
-        Status.currentScreen = stack.last()
+        Status.currentScreen.value = stack.last()
     }
 }
 

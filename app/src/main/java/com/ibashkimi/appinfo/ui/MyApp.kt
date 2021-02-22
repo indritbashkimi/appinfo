@@ -1,26 +1,17 @@
 package com.ibashkimi.appinfo.ui
 
-import androidx.compose.Composable
-import androidx.ui.core.Alignment
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Image
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.clickable
-import androidx.ui.foundation.isSystemInDarkTheme
-import androidx.ui.graphics.ColorFilter
-import androidx.ui.layout.padding
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Scaffold
-import androidx.ui.material.Surface
-import androidx.ui.material.TopAppBar
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.ArrowBack
-import androidx.ui.material.ripple.ripple
-import androidx.ui.res.stringResource
-import androidx.ui.tooling.preview.Preview
-import androidx.ui.unit.dp
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.ibashkimi.appinfo.*
+import com.ibashkimi.appinfo.R
 import com.ibashkimi.appinfo.data.DataManager
 import com.ibashkimi.appinfo.ui.details.*
 import com.ibashkimi.appinfo.ui.home.HomeScreen
@@ -32,9 +23,9 @@ fun MyApp() {
     MaterialTheme(
         colors = if (isDark) darkThemeColors else lightThemeColors
     ) {
-        val destination = Status.currentScreen
+        val destination = Status.currentScreen.value
         Scaffold(
-            topAppBar = {
+            topBar = {
                 val title: String = stringResource(destination.titleStringRes)
                 if (destination == Screen.Home) {
                     TopAppBar(title = { Text(title) })
@@ -42,13 +33,13 @@ fun MyApp() {
                     TopAppBar(
                         title = { Text(title) },
                         navigationIcon = {
-                            Image(
-                                modifier = Modifier.padding(16.dp) + Modifier.ripple() + Modifier.clickable(
-                                    onClick = { Navigation.pop() }),
-                                asset = Icons.Default.ArrowBack,
-                                alignment = Alignment.Center,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary)
-                            )
+                            IconButton(onClick = { Navigation.pop() }) {
+                                Image(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary)
+                                )
+                            }
                         })
                 }
             },
@@ -65,7 +56,7 @@ private fun AppContent(screen: Screen) {
     Surface(color = MaterialTheme.colors.background) {
         when (screen) {
             is Screen.Home -> {
-                val context = ContextAmbient.current
+                val context = LocalContext.current
                 HomeScreen(DataManager.getPackages(context))
             }
             is Screen.AppDetails -> DetailsScreen(request = screen.request)

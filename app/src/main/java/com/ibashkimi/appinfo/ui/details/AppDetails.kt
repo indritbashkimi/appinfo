@@ -4,19 +4,21 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import android.os.Build
 import android.text.format.DateUtils
-import androidx.compose.Composable
-import androidx.ui.core.Alignment
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.core.drawOpacity
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.foundation.clickable
-import androidx.ui.layout.*
-import androidx.ui.material.MaterialTheme
-import androidx.ui.res.stringResource
-import androidx.ui.tooling.preview.Preview
-import androidx.ui.unit.dp
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ListItem
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.ibashkimi.appinfo.R
 import com.ibashkimi.appinfo.Screen
 import com.ibashkimi.appinfo.data.Request
@@ -32,9 +34,10 @@ fun DetailsScreen(request: Request<PackageInfo>) {
             Text(
                 text = stringResource(R.string.loading),
                 style = MaterialTheme.typography.h6,
-                modifier = Modifier.fillMaxSize() + Modifier.wrapContentSize(Alignment.Center) + Modifier.drawOpacity(
-                    opacity = 0.5f
-                )
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(Alignment.Center)
+                    .alpha(0.5f)
             )
         }
         is Result.Success -> {
@@ -43,74 +46,106 @@ fun DetailsScreen(request: Request<PackageInfo>) {
     }
 }
 
+//@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun PackageInfoLoaded(app: PackageInfo) {
-    val context = ContextAmbient.current
-    VerticalScroller {
-        Column(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
-            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+    val context = LocalContext.current
+    LazyColumn {
+        item {
+            /*Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+
+
+            }*/
+            ListItem(secondaryText = {
+                Text(app.packageName, style = MaterialTheme.typography.subtitle2)
+            }) {
                 val label = app.applicationInfo.loadLabel(context.packageManager).toString()
                 Text(label, style = MaterialTheme.typography.subtitle1)
-                Text(app.packageName, style = MaterialTheme.typography.subtitle2)
             }
-            Column {
-                DetailElem(R.string.installed, app.firstInstallTime.toRelativeTimeSpan())
-                DetailElem(R.string.updated, app.firstInstallTime.toRelativeTimeSpan())
-                val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    app.longVersionCode.toString()
-                } else {
-                    @Suppress("DEPRECATION")
-                    app.versionCode.toString()
-                }
-                DetailElem(R.string.version_code, versionCode)
-                DetailElem(R.string.version_name, app.versionName.toString())
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    DetailElem(R.string.min_sdk, app.applicationInfo.minSdkVersion.toString())
-                }
-                DetailElem(R.string.target_sdk, app.applicationInfo.targetSdkVersion.toString())
-                DetailElem(R.string.app_uid, app.applicationInfo.uid.toString())
-                DetailElem(R.string.component_enabled, app.applicationInfo.enabled.toString())
-                DetailElem(
-                    R.string.backup_agent_name,
-                    app.applicationInfo.backupAgentName ?: stringResource(R.string.none)
-                )
+        }
+        item { DetailElem(R.string.installed, app.firstInstallTime.toRelativeTimeSpan()) }
+        item { DetailElem(R.string.updated, app.firstInstallTime.toRelativeTimeSpan()) }
+        val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            app.longVersionCode.toString()
+        } else {
+            @Suppress("DEPRECATION")
+            app.versionCode.toString()
+        }
+        item { DetailElem(R.string.version_code, versionCode) }
+        item { DetailElem(R.string.version_name, app.versionName.toString()) }
+        item {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                DetailElem(R.string.min_sdk, app.applicationInfo.minSdkVersion.toString())
+            }
+        }
+        item { DetailElem(R.string.target_sdk, app.applicationInfo.targetSdkVersion.toString()) }
+        item { DetailElem(R.string.app_uid, app.applicationInfo.uid.toString()) }
+        item { DetailElem(R.string.component_enabled, app.applicationInfo.enabled.toString()) }
+        item {
+            DetailElem(
+                R.string.backup_agent_name,
+                app.applicationInfo.backupAgentName ?: stringResource(R.string.none)
+            )
+        }
 
-                SubsectionItem(R.string.activities, app.activities.sizeToString(context)) {
-                    app.activities?.let { navigateTo(Screen.Activities(it)) }
-                }
-                SubsectionItem(R.string.services, app.services.sizeToString(context)) {
-                    app.services?.let { navigateTo(Screen.Services(it)) }
-                }
-                SubsectionItem(
-                    R.string.permissions,
-                    app.requestedPermissions.sizeToString(context)
-                ) {
-                    app.requestedPermissions?.let { navigateTo(Screen.Permissions(app)) }
-                }
-                SubsectionItem(R.string.providers, app.providers.sizeToString(context)) {
-                    app.providers?.let { navigateTo(Screen.Providers(it)) }
-                }
-                SubsectionItem(R.string.receivers, app.receivers.sizeToString(context)) {
-                    app.receivers?.let { navigateTo(Screen.Receivers(it)) }
-                }
-                SubsectionItem(R.string.features, app.reqFeatures.sizeToString(context)) {
-                    app.reqFeatures?.let { navigateTo(Screen.Features(it)) }
-                }
+        item {
+            SubsectionItem(R.string.activities, app.activities.sizeToString(context)) {
+                app.activities?.let { navigateTo(Screen.Activities(it)) }
+            }
+        }
+        item {
+            SubsectionItem(R.string.services, app.services.sizeToString(context)) {
+                app.services?.let { navigateTo(Screen.Services(it)) }
+            }
+        }
+        item {
+            SubsectionItem(
+                R.string.permissions,
+                app.requestedPermissions.sizeToString(context)
+            ) {
+                app.requestedPermissions?.let { navigateTo(Screen.Permissions(app)) }
+            }
+        }
+        item {
+            SubsectionItem(R.string.providers, app.providers.sizeToString(context)) {
+                app.providers?.let { navigateTo(Screen.Providers(it)) }
+            }
+        }
+        item {
+            SubsectionItem(R.string.receivers, app.receivers.sizeToString(context)) {
+                app.receivers?.let { navigateTo(Screen.Receivers(it)) }
+            }
+        }
+        item {
+            SubsectionItem(R.string.features, app.reqFeatures.sizeToString(context)) {
+                app.reqFeatures?.let { navigateTo(Screen.Features(it)) }
+            }
+        }
 
+        item {
+            Item(
+                R.string.class_name,
+                app.applicationInfo.className ?: stringResource(R.string.none)
+            )
+        }
+        item {
+            Item(R.string.data_dir, app.applicationInfo.dataDir)
+        }
+        item {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Item(
-                    R.string.class_name,
-                    app.applicationInfo.className ?: stringResource(R.string.none)
+                    R.string.device_protected_data_dir,
+                    app.applicationInfo.deviceProtectedDataDir
                 )
-                Item(R.string.data_dir, app.applicationInfo.dataDir)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    Item(
-                        R.string.device_protected_data_dir,
-                        app.applicationInfo.deviceProtectedDataDir
-                    )
-                }
-                Item(R.string.source_dir, app.applicationInfo.sourceDir)
-                Item(R.string.public_source_dir, app.applicationInfo.publicSourceDir)
             }
+        }
+        item { Item(R.string.source_dir, app.applicationInfo.sourceDir) }
+        item {
+            Item(
+                R.string.public_source_dir,
+                app.applicationInfo.publicSourceDir
+            )
         }
     }
 }
@@ -118,7 +153,9 @@ private fun PackageInfoLoaded(app: PackageInfo) {
 @Composable
 private fun DetailElem(first: String, second: String) {
     Row(
-        modifier = Modifier.fillMaxWidth() + Modifier.padding(16.dp, 8.dp, 16.dp, 8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp, 8.dp, 16.dp, 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
@@ -136,10 +173,16 @@ fun DetailElem(first: Int, second: String) {
 }
 
 @Composable
-fun SubsectionItem(title: String, summary: String = "", onClick: () -> Unit = {}) {
+fun SubsectionItem(
+    title: String,
+    summary: String = "",
+    onClick: () -> Unit = {}
+) {
     Row(
-        modifier = Modifier.fillMaxWidth()
-                + Modifier.clickable(onClick = onClick) + Modifier.padding(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = title, modifier = Modifier.padding(end = 8.dp))

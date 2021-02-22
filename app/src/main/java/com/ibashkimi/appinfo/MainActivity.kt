@@ -1,8 +1,8 @@
 package com.ibashkimi.appinfo
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.ui.core.setContent
 import com.ibashkimi.appinfo.ui.MyApp
 
 class MainActivity : AppCompatActivity() {
