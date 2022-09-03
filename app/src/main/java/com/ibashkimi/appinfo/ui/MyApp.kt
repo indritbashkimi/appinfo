@@ -43,17 +43,17 @@ fun MyApp() {
                         })
                 }
             },
-            bodyContent = {
-                AppContent(destination)
+            content = {
+                AppContent(destination, Modifier.padding(it))
             }
         )
     }
 }
 
 @Composable
-private fun AppContent(screen: Screen) {
+private fun AppContent(screen: Screen, modifier: Modifier = Modifier) {
     android.util.Log.d("MyApp", "new screen: $screen")
-    Surface(color = MaterialTheme.colors.background) {
+    Surface(modifier = modifier, color = MaterialTheme.colors.background) {
         when (screen) {
             is Screen.Home -> {
                 val context = LocalContext.current
