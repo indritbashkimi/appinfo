@@ -1,39 +1,42 @@
-package com.ibashkimi.appinfo.data
+package com.ibashkimi.appinfo.ui.home
 
+import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import androidx.compose.Model
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ibashkimi.appinfo.data.AppPackage
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-object DataManager {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val application: Application
+) : ViewModel() {
 
-    private var packages: List<AppPackage>? = null
+    val uiState: StateFlow<HomeUiState> =
+        flow { emit(fetchPackages()) }.map { packages ->
+            HomeUiState(
+                isLoading = false,
+                packages = packages.sortedBy { it.label }.toImmutableList()
+            )
+        }.flowOn(Dispatchers.IO).stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            HomeUiState()
+        )
 
-    fun getPackages(context: Context): Request<List<AppPackage>> {
-        val request = Request<List<AppPackage>>()
-        packages?.also {
-            request.result = Result.Success(it)
-        } ?: CoroutineScope(Dispatchers.IO).launch {
-            val newData = fetchPackages(context).sortedBy { it.label }//.take(50)
-            packages = newData
-            withContext(Dispatchers.Main) {
-                request.result = Result.Success(newData)
-            }
-        }
-
-        return request
-    }
-
-    fun getPackage(context: Context, packageName: String): Request<PackageInfo> {
+    fun getPackage(packageName: String): Request<PackageInfo> {
         val request = Request<PackageInfo>()
         CoroutineScope(Dispatchers.IO).launch {
-            val packageInfo = fetchPackage(context, packageName)
+            val packageInfo = fetchPackage(application, packageName)
             withContext(Dispatchers.Main) {
                 request.result = Result.Success(packageInfo)
             }
@@ -42,13 +45,12 @@ object DataManager {
         return request
     }
 
-    private fun packagesFlow(context: Context): Flow<Result<List<AppPackage>>> = flow {
-        emit(Result.Loading())
-        emit(Result.Success(fetchPackages(context)))
+    fun getPackageFlow(packageName: String): Flow<PackageInfo> {
+        return flowOf(fetchPackage(application, packageName)).flowOn(Dispatchers.IO)
     }
 
-    private fun fetchPackages(context: Context): List<AppPackage> {
-        val packageManager = context.packageManager
+    private fun fetchPackages(): List<AppPackage> {
+        val packageManager = application.packageManager
         return packageManager.getInstalledPackages(PackageManager.GET_META_DATA).map {
             AppPackage(
                 it,
@@ -69,7 +71,6 @@ object DataManager {
         )
 }
 
-@Model
 class Request<T>(var result: Result<T> = Result.Loading())
 
 sealed class Result<T> {
