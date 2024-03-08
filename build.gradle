@@ -1,13 +1,12 @@
 buildscript {
-    ext.kotlin_version = "1.9.22"
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.3.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.50'
+        classpath libs.gradle.plugin.android
+        classpath libs.gradle.plugin.kotlin
+        classpath libs.gradle.plugin.hilt.android
     }
 }
 
