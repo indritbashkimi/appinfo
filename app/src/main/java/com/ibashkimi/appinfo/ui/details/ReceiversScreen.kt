@@ -49,10 +49,10 @@ fun ReceiversScreen(modifier: Modifier = Modifier, viewModel: DetailsViewModel =
 @Composable
 private fun ReceiverItem(activityInfo: ActivityInfo, modifier: Modifier = Modifier) {
     ListItem(
-        headlineText = {
+        headlineContent = {
             Text(activityInfo.name.substringAfterLast("."))
         },
         modifier = modifier,
-        supportingText = { Text(activityInfo.name.substringBeforeLast(".")) }
+        supportingContent = { Text(activityInfo.name.substringBeforeLast(".")) }
     )
 }

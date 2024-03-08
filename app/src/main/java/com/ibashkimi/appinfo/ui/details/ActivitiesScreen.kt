@@ -6,7 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,8 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ibashkimi.appinfo.R
-import com.ibashkimi.appinfo.ui.component.Item
 import com.ibashkimi.appinfo.ui.component.BackNavigationIcon
+import com.ibashkimi.appinfo.ui.component.Item
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -67,11 +72,11 @@ internal fun ActivitiesScreen(
 @Composable
 private fun ActivityItem(activity: ActivityInfo, modifier: Modifier = Modifier) {
     ListItem(
-        headlineText = {
+        headlineContent = {
             Text(activity.name.substringAfterLast("."))
         },
         modifier = modifier,
-        supportingText = {
+        supportingContent = {
             Text(activity.name.substringBeforeLast("."))
         }
     )

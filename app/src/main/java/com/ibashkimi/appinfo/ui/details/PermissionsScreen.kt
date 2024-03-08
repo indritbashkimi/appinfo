@@ -58,7 +58,7 @@ fun PermissionsScreen(
 @Composable
 private fun PermissionItem(permission: String) {
     ListItem(
-        headlineText = { Text(permission) },
+        headlineContent = { Text(permission) },
         modifier = Modifier.padding(16.dp, 8.dp, 16.dp, 8.dp)
     )
 }
