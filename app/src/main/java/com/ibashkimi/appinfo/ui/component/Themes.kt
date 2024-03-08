@@ -1,4 +1,4 @@
-package com.ibashkimi.appinfo
+package com.ibashkimi.appinfo.ui.component
 
 import android.app.Activity
 import android.os.Build

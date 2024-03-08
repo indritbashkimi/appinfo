@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
 import androidx.core.view.WindowCompat
-import com.ibashkimi.appinfo.AppInfoTheme
+import com.ibashkimi.appinfo.ui.component.AppInfoTheme
 import com.ibashkimi.appinfo.ui.navigation.AppInfoNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
