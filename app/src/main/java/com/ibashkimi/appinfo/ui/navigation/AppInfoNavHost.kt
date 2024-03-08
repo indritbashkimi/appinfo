@@ -1,5 +1,6 @@
 package com.ibashkimi.appinfo.ui.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -15,7 +16,11 @@ fun AppInfoNavHost(modifier: Modifier = Modifier) {
     NavHost(
         navController = navController,
         startDestination = "home_route",
-        modifier = modifier
+        modifier = modifier,
+        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left) },
+        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left) },
+        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right) },
+        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right) },
     ) {
         composable("home_route") {
             HomeRoute(
