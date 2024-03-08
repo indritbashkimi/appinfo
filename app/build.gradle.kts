@@ -57,7 +57,6 @@ android {
 dependencies {
     implementation(platform(libs.compose.bom))
 
-    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.drawablepainter)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.google.material)
