@@ -66,11 +66,11 @@ fun ServicesScreen(modifier: Modifier = Modifier, viewModel: DetailsViewModel = 
 @Composable
 private fun ServiceItem(service: ServiceInfo, modifier: Modifier) {
     ListItem(
-        headlineText = {
+        headlineContent = {
             Text(service.name.substringAfterLast("."))
         },
         modifier = modifier,
-        supportingText = {
+        supportingContent = {
             Text(service.name.substringBeforeLast("."))
         }
     )

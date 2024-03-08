@@ -65,11 +65,11 @@ fun ProvidersScreen(modifier: Modifier = Modifier, viewModel: DetailsViewModel =
 @Composable
 private fun ProviderItem(provider: ProviderInfo, modifier: Modifier = Modifier) {
     ListItem(
-        headlineText = {
+        headlineContent = {
             Text(provider.name.substringAfterLast("."))
         },
         modifier = modifier,
-        supportingText = { Text(provider.name.substringBeforeLast(".")) }
+        supportingContent = { Text(provider.name.substringBeforeLast(".")) }
     )
 }
 

@@ -23,7 +23,7 @@ import kotlinx.coroutines.withContext
 internal fun AppListItem(packageName: String, label: String, modifier: Modifier = Modifier) {
     ListItem(
         modifier = modifier,
-        headlineText = {
+        headlineContent = {
             Text(
                 label,
                 maxLines = 1,
@@ -33,7 +33,7 @@ internal fun AppListItem(packageName: String, label: String, modifier: Modifier 
         leadingContent = {
             AppImage(packageName)
         },
-        supportingText = {
+        supportingContent = {
             Text(
                 packageName,
                 maxLines = 1,

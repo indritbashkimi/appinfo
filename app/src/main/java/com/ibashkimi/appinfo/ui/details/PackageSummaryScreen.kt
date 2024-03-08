@@ -95,13 +95,13 @@ private fun PackageInfoLoaded(
     val context = LocalContext.current
     Column(modifier.verticalScroll(rememberScrollState())) {
         ListItem(
-            headlineText = {
+            headlineContent = {
                 val label = remember(packageInfo.packageName) {
                     packageInfo.applicationInfo.loadLabel(context.packageManager).toString()
                 }
                 Text(label)
             },
-            supportingText = {
+            supportingContent = {
                 Text(packageInfo.packageName)
             })
         DetailElem(
@@ -235,7 +235,7 @@ fun SubsectionItem(
     onClick: () -> Unit = {}
 ) {
     ListItem(
-        headlineText = { Text(stringResource(title)) },
+        headlineContent = { Text(stringResource(title)) },
         modifier = modifier.clickable(onClick = onClick),
         trailingContent = { Text(summary) },
         colors = ListItemDefaults.colors(containerColor = Color.Transparent)
